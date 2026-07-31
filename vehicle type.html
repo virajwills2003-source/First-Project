@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Wide Range of Vehicles</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('images/car1.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: #000000;
+            line-height: 1.6;
+            padding-top: 80px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+
+            padding: 0 20px;
+
+        }
+
+        /* Navigation Bar */
+        nav {
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 15px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #fff;
+            text-decoration: none;
+            gap: 10px;
+        }
+
+        .logo i {
+            font-size: 2rem;
+            color: #4CAF50;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 30px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #4CAF50;
+        }
+
+        .account-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+
+        .account-btn:hover {
+            background-color: #45a049;
+        }
+
+        /* Dropdown Menu */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 50px;
+            background-color: rgba(0, 0, 0, 0.9);
+            min-width: 200px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            border-radius: 5px;
+            overflow: hidden;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+
+        .dropdown.active .dropdown-content {
+            display: block;
+            animation: none;
+        }
+
+        .dropdown-content a {
+            color: white;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            transition: background-color 0.3s;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #4CAF50;
+        }
+
+        .menu-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: none;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            padding-top: 80px;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .hero-content {
+            max-width: 800px;
+            padding: 20px;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            animation: slideInDown 1s;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            animation: slideInUp 1s;
+        }
+
+        .cta-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            animation: fadeIn 1.5s;
+        }
+
+        .cta-btn:hover {
+            background-color: #45a049;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+
+        .title {
+            color: white;
+            font-size: 2.5rem;
+            font-weight: 900;
+            text-align: center;
+            margin-bottom: 4rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            margin-top: 10px;
+            margin-top: 20px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (min-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .vehicle-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 1;
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .vehicle-card:hover img {
+            transform: scale(1.1);
+        }
+
+        .vehicle-card {
+            position: relative;
+            overflow: hidden;
+            border-radius: 1rem;
+            box-shadow: 0 6px 32px 0 rgba(0, 0, 0, 0.09);
+            height: 350px;
+            background: #222;
+            margin-bottom: 30px;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s ease;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .vehicle-card.reveal {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .vehicle-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .card-overlay {
+            background: rgba(0, 0, 0, 0.4);
+            position: absolute;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 2;
+            width: 100%;
+            height: 100%;
+        }
+
+        .card-title {
+            position: absolute;
+            top: 48px;
+            left: 48px;
+            z-index: 3;
+            color: #fde9e9;
+            font-size: 2.5rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            text-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+        }
+
+        .arrow-btn {
+            position: absolute;
+            top: 45%;
+            right: 48px;
+            z-index: 3;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.3);
+            width: 56px;
+            height: 56px;
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .arrow-btn:hover {
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .arrow-svg {
+            width: 24px;
+            height: 24px;
+            color: #fff;
+            display: inline-block;
+        }
+
+        @media (max-width: 600px) {
+            .card-title {
+                left: 22px;
+                font-size: 1.5rem;
+                top: 26px;
+            }
+
+            .arrow-btn {
+                right: 22px;
+                width: 44px;
+                height: 44px;
+            }
+
+            .vehicle-card {
+                height: 225px;
+            }
+        }
+
+
+        /* Footer */
+        footer {
+            background-color: #222;
+            color: #fff;
+            padding: 50px 0 20px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .footer-column h3 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            color: #4CAF50;
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-column ul li a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-column ul li a:hover {
+            color: #4CAF50;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-links a {
+            color: #fff;
+            font-size: 1.5rem;
+            transition: color 0.3s;
+        }
+
+        .social-links a:hover {
+            color: #4CAF50;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid #444;
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+
+        .terms {
+            margin-top: 10px;
+        }
+
+        .terms a {
+            color: #4CAF50;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideInDown {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideInUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .hero h1 {
+                font-size: 2.8rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .menu-btn {
+                display: block;
+            }
+
+            .dropdown {
+                position: static;
+            }
+
+            .dropdown-content {
+                position: static;
+                display: none;
+                width: 100%;
+                box-shadow: none;
+                background-color: transparent;
+            }
+
+            .dropdown:hover .dropdown-content {
+                display: none;
+            }
+
+            .dropdown.active .dropdown-content {
+                display: block;
+                animation: none;
+            }
+
+            .dropdown-content a {
+                padding: 10px 0;
+                border-bottom: 1px solid #444;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+
+            .cta-btn {
+                padding: 12px 25px;
+                font-size: 1rem;
+            }
+
+            .vehicle-card {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation Bar -->
+    <nav>
+        <div class="container nav-container">
+            <div class="dropdown">
+                <button class="menu-btn" id="menuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="dropdown-content" id="dropdownContent">
+                    <a href="home page.html">Home</a>
+                    <a href="vehicle type.html">Vehicles</a>
+                    <a href="aboutus.html">About Us</a>
+                    <a href="contact us page.html">Contact</a>
+                </div>
+            </div>
+
+            <a href="home page.html" class="logo">
+                <i class="bi bi-car-front-fill"></i>
+                DriveEase
+            </a>
+
+            <ul class="nav-links">
+                <li><a href="home page.html">Home</a></li>
+                <li><a href="vehicle type.html">Vehicles</a></li>
+                <li><a href="aboutus.html">About Us</a></li>
+                <li><a href="contact us page.html">Contact</a></li>
+            </ul>
+
+            <button class="account-btn" onclick="window.location.href='logging form.html'">Sign In</button>
+        </div>
+    </nav>
+
+    <div class="container">
+
+        <h1 class="title">Wide Range of Vehicles</h1>
+        <div class="grid">
+            <div class="vehicle-card">
+                <img src="images/car.jpg" alt="CARS category">
+                <div class="card-overlay"></div>
+                <div class="card-title">CARS</div>
+                <a href="vehicle list(car).html" class="arrow-btn" aria-label="View SUVS">
+                    <span class="arrow-svg">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </span>
+                </a>
+            </div>
+            <div class="vehicle-card">
+                <img src="images/van.jpg" alt="SUVS category">
+                <div class="card-overlay"></div>
+                <div class="card-title">VANS</div>
+                <a href="vehicle list(van).html" class="arrow-btn" aria-label="View SUVS">
+                    <span class="arrow-svg">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </span>
+                </a>
+            </div>
+            <div class="vehicle-card">
+                <img src="images/bus.jpg" alt="VANS category">
+                <div class="card-overlay"></div>
+                <div class="card-title">BUSES</div>
+                <a href="vehicle list(bus).html" class="arrow-btn" aria-label="View VANS">
+                    <span class="arrow-svg">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </span>
+                </a>
+            </div>
+            <div class="vehicle-card">
+                <img src="images/truck.jpg" alt="ELECTRIC category">
+                <div class="card-overlay"></div>
+                <div class="card-title">TRUCKS</div>
+                <a href="vehicle list(truck).html" class="arrow-btn" aria-label="View ELECTRIC">
+                    <span class="arrow-svg">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </span>
+                </a>
+            </div>
+        </div>
+    </div>
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>DriveEase</h3>
+                    <p>Your trusted partner for premium vehicle rentals. We offer the best selection of vehicles at
+                        competitive prices.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-google"></i></a>
+                    </div>
+                </div>
+
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="home page.html">Home</a></li>
+                        <li><a href="vehicle type.html">Vehicles</a></li>
+                        <li><a href="aboutus.html">About Us</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h3>Contact Us</h3>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i> 123 Rental Street, Kandy</li>
+                        <li><i class="fas fa-phone"></i>0769262512</li>
+                        <li><i class="fas fa-envelope"></i> info@driveease.com</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2023 DriveEase. All Rights Reserved.</p>
+                <div class="terms">
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Cookie Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+        // Mobile Menu Toggle
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuBtn = document.getElementById('menuBtn');
+            const dropdown = document.querySelector('.dropdown');
+            
+            if (menuBtn && dropdown) {
+                menuBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    dropdown.classList.toggle('active');
+                });
+
+                document.addEventListener('click', function() {
+                    dropdown.classList.remove('active');
+                });
+            }
+        });
+
+        // Scroll Reveal Animation (Intersection Observer)
+        document.addEventListener('DOMContentLoaded', function() {
+            const observerOptions = {
+                threshold: 0.15,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry, index) => {
+                    if (entry.isIntersecting) {
+                        // Add class to trigger animation
+                        setTimeout(() => {
+                            entry.target.classList.add('reveal');
+                        }, index % 4 * 100); // Stagger by 100ms
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            const cards = document.querySelectorAll('.vehicle-card');
+            cards.forEach(card => observer.observe(card));
+        });
+    </script>
+</body>
+
+</html>

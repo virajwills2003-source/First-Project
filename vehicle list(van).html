@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Vehicle List</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('vehicle list bg.jpg');
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, sans-serif;
+      min-height: 100vh;
+      padding-top: 60px;
+    }
+    .container {
+      width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            margin-top: 0px;
+            padding: 0 20px;
+    }
+
+    /* Navigation Bar */
+    nav {
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 15px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #fff;
+            text-decoration: none;
+            gap: 10px;
+        }
+
+        .logo i {
+            font-size: 2rem;
+            color: #4CAF50;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 30px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #4CAF50;
+        }
+
+        .account-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+
+        .account-btn:hover {
+            background-color: #45a049;
+        }
+
+        /* Dropdown Menu */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+    position: absolute;
+    right: 0;
+    top: 50px;
+    background-color: rgba(0, 0, 0, 0.9);
+    min-width: 200px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    border-radius: 5px;
+    overflow: hidden;
+    transition: all 0.3s ease-in-out;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+
+        .dropdown-content a {
+            color: white;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            transition: background-color 0.3s;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #4CAF50;
+        }
+
+        .menu-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: none;
+        }
+
+    .opting-heading {
+      text-align: center;
+      margin-top: 48px;
+      font-size: 2.5rem;
+      font-weight: 900;
+      color: #ffc2c9;
+      letter-spacing: 0.06em;
+    }
+    .opt-in {
+      text-align: center;
+      color: #d8a8a8;
+      margin-bottom: 36px;
+      font-size: 1.15rem;
+      opacity: .7;
+    }
+    .cards-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 32px;
+      max-width: 1100px;
+      margin: 0 auto;
+      margin-bottom: 20px;
+    }
+    @media (min-width: 640px) {
+      .cards-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    @media (min-width: 900px) {
+      .cards-grid {
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+      }
+    }
+    .card {
+      background: #fff;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 6px 32px 0 rgba(0,0,0,0.09);
+      display: flex;
+      flex-direction: column;
+      transition: box-shadow .18s, transform .18s;
+      height: 100%;
+      margin-bottom: 20px;
+    }
+    .card:hover {
+      box-shadow: 0 15px 45px rgba(0,0,0,0.25);
+      transform: translateY(-10px) scale(1.02);
+    }
+    .card {
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s ease, opacity 0.6s ease;
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    .card.reveal {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .card-img {
+      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .card:hover .card-img {
+      transform: scale(1.1);
+    }
+    .card-img {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+      background: #ddd;
+      display: block;
+    }
+    .card-content {
+      padding: 18px 28px 22px 28px;
+      display: flex;
+      flex-direction: column;
+      flex: 1 1 auto;
+    }
+    .chip {
+      align-self: flex-start;
+      background: #f6f6f8;
+      color: #333;
+      border: 1px solid #e4e6ef;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      padding: 3px 14px;
+      margin-bottom: 16px;
+      margin-top: 8px;
+      letter-spacing: 0.06em;
+    }
+    .vehicle-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #222;
+    }
+    .vehicle-price {
+      color: #ea384c;
+      font-weight: bold;
+      font-size: 1.1rem;
+      margin-top: 10px;
+      display: inline-block;
+    }
+    .vehicle-per-month {
+      color: #ea384c;
+      font-weight: 700;
+      font-size: 1rem;
+      margin-left: 6px;
+    }
+    .vehicle-month-text {
+      color: #828282;
+      font-size: 0.93rem;
+      margin-left: 2px;
+      font-weight: 500;
+    }
+    .rent-btn {
+      width: 100%;
+      margin-top: 20px;
+      background: #1f0104;
+      color: #fff;
+      border: none;
+      padding: 12px 0;
+      border-radius: 13px;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      box-shadow: 0 4px 12px 0 #ea384c33;
+      transition: background .15s;
+    }
+    .rent-btn:hover {
+      background: #4CAF50;
+    }
+     /* Footer */
+     footer {
+            background-color: #222;
+            color: #fff;
+            padding: 50px 0 20px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .footer-column h3 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            color: #4CAF50;
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-column ul li a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-column ul li a:hover {
+            color: #4CAF50;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-links a {
+            color: #fff;
+            font-size: 1.5rem;
+            transition: color 0.3s;
+        }
+
+        .social-links a:hover {
+            color: #4CAF50;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid #444;
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+
+        .terms {
+            margin-top: 10px;
+        }
+
+        .terms a {
+            color: #4CAF50;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideInDown {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideInUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .hero h1 {
+                font-size: 2.8rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .menu-btn {
+                display: block;
+            }
+            
+            .dropdown {
+                position: static;
+            }
+            
+            .dropdown-content {
+                position: static;
+                display: none;
+                width: 100%;
+                box-shadow: none;
+                background-color: transparent;
+            }
+            
+            .dropdown:hover .dropdown-content {
+                display: none;
+            }
+            
+            .dropdown.active .dropdown-content {
+                display: block;
+                animation: none;
+            }
+            
+            .dropdown-content a {
+                padding: 10px 0;
+                border-bottom: 1px solid #444;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+            
+            .cta-btn {
+                padding: 12px 25px;
+                font-size: 1rem;
+            }
+            
+            .vehicle-card {
+                max-width: 100%;
+            }
+        }
+
+  </style>
+</head>
+<body>
+  <!-- Navigation Bar -->
+  <nav>
+    <div class="container nav-container">
+        <div class="dropdown">
+            <button class="menu-btn" id="menuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="dropdown-content" id="dropdownContent">
+                <a href="home page.html">Home</a>
+                <a href="vehicle type.html">Vehicles</a>
+                <a href="aboutus.html">About Us</a>
+                <a href="contact us page.html">Contact</a>
+            </div>
+        </div>
+        
+        <a href="home page.html" class="logo">
+            <i class="bi bi-car-front-fill"></i> 
+            DriveEase
+        </a>
+        
+        <ul class="nav-links">
+            <li><a href="home page.html">Home</a></li>
+            <li><a href="vehicle type.html">Vehicles</a></li>
+            <li><a href="aboutus.html">About Us</a></li>
+            <li><a href="contact us page.html">Contact</a></li>
+        </ul>
+        
+        <button class="account-btn"onclick="window.location.href='logging form.html'">Sign In</button>
+    </div>
+</nav>
+
+  <div class="container">
+    <h1 class="opting-heading">🔥 Find Your Dream Ride Today!</h1>
+    <p class="opt-in">Choose from the hottest deals on the market — Book now before they're gone!</p>
+    <div class="cards-grid">
+      <div class="card">
+        <img class="card-img" src="images/toyota hiace.jpg" alt="Honda Civic 2018">
+        <div class="card-content">
+          <span class="chip">2020</span>
+          <div class="vehicle-title">Toyota Hiace</div>
+          <div>
+            
+            <span class="vehicle-per-month">| LKR4500</span>
+            <span class="vehicle-month-text">/day</span>
+          </div>
+          <button class="rent-btn">Rent Now</button>
+        </div>
+      </div>
+      <div class="card">
+        <img class="card-img" src="images/van.jpg" alt="Honda Civic 2018">
+        <div class="card-content">
+          <span class="chip">2024</span>
+          <div class="vehicle-title">Nissan Carvan</div>
+          <div>
+            
+            <span class="vehicle-per-month">| LKR8000</span>
+            <span class="vehicle-month-text">/day</span>
+          </div>
+          <button class="rent-btn">Rent Now</button>
+        </div>
+      </div>
+      <div class="card">
+        <img class="card-img" src="images/mitsubishiminicab.jpg" alt="Honda Civic 2018">
+        <div class="card-content">
+          <span class="chip">2023</span>
+          <div class="vehicle-title">Mitsubishiminicab</div>
+          <div>
+            
+            <span class="vehicle-per-month">| LKR6500</span>
+            <span class="vehicle-month-text">/day</span>
+          </div>
+          <button class="rent-btn">Rent Now</button>
+        </div>
+      </div>
+      <div class="card">
+        <img class="card-img" src="images/suzuki avery.jpg" alt="Honda Civic 2018">
+        <div class="card-content">
+          <span class="chip">2023</span>
+          <div class="vehicle-title">Suzuki Avery</div>
+          <div>
+            
+            <span class="vehicle-per-month">| LKR2500</span>
+            <span class="vehicle-month-text">/day</span>
+          </div>
+          <button class="rent-btn">Rent Now</button>
+        </div>
+      </div>
+      <div class="card">
+        <img class="card-img" src="images/dai hatsu.jpg" alt="Honda Civic 2018">
+        <div class="card-content">
+          <span class="chip">2022</span>
+          <div class="vehicle-title">Dai Hatsu Atrai</div>
+          <div>
+            
+            <span class="vehicle-per-month">| LKR9800</span>
+            <span class="vehicle-month-text">/day</span>
+          </div>
+          <button class="rent-btn">Rent Now</button>
+        </div>
+      </div>
+      <div class="card">
+        <img class="card-img" src="images/isuzu fargo.jpg" alt="Honda Civic 2018">
+        <div class="card-content">
+          <span class="chip">2021</span>
+          <div class="vehicle-title">Isuzu Fargo</div>
+          <div>
+            
+            <span class="vehicle-per-month">| LKR6500</span>
+            <span class="vehicle-month-text">/day</span>
+          </div>
+          <button class="rent-btn">Rent Now</button>
+        </div>
+      </div>
+      <div class="card">
+        <img class="card-img" src="images/mazda bongo.jpg" alt="Honda Civic 2018">
+        <div class="card-content">
+          <span class="chip">2019</span>
+          <div class="vehicle-title">Mazda Bongo</div>
+          <div>
+            
+            <span class="vehicle-per-month">| LKR7500</span>
+            <span class="vehicle-month-text">/day</span>
+          </div>
+          <button class="rent-btn">Rent Now</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-column">
+                <h3>DriveEase</h3>
+                <p>Your trusted partner for premium vehicle rentals. We offer the best selection of vehicles at competitive prices.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-google"></i></a>
+                </div>
+            </div>
+            
+            <div class="footer-column">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="home page.html">Home</a></li>
+                    <li><a href="vehicle type.html">Vehicles</a></li>
+                    <li><a href="aboutus.html">About Us</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h3>Contact Us</h3>
+                <ul>
+                    <li><i class="fas fa-map-marker-alt"></i> 123 Rental Street, Kandy</li>
+                    <li><i class="fas fa-phone"></i>0769262512</li>
+                    <li><i class="fas fa-envelope"></i> info@driveease.com</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2023 DriveEase. All Rights Reserved.</p>
+            <div class="terms">
+                <a href="#">Terms of Service</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Cookie Policy</a>
+            </div>
+        </div>
+    </div>
+</footer>
+<script>
+  // Dropdown menu toggle for mobile
+  // Enhanced mobile menu toggle
+  document.addEventListener("DOMContentLoaded", function() {
+      const menuBtn = document.getElementById("menuBtn");
+      const dropdownContent = document.getElementById("dropdownContent");
+      const dropdown = document.querySelector(".dropdown");
+      
+      // Toggle dropdown on menu button click
+      menuBtn.addEventListener("click", function(event) {
+          event.stopPropagation();
+          dropdown.classList.toggle("active");
+          
+          // Update aria attributes
+          const isExpanded = dropdown.classList.contains("active");
+          menuBtn.setAttribute("aria-expanded", isExpanded);
+          
+          // Change icon
+          menuBtn.innerHTML = isExpanded 
+              ? '<i class="fas fa-times"></i>' 
+              : '<i class="fas fa-bars"></i>';
+      });
+      
+      // Close dropdown when clicking outside
+      document.addEventListener("click", function(event) {
+          if (!dropdown.contains(event.target)) {
+              dropdown.classList.remove("active");
+              menuBtn.setAttribute("aria-expanded", "false");
+              menuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+          }
+      });
+      
+      // Close dropdown when a menu item is clicked (for single page navigation)
+      dropdownContent.querySelectorAll("a").forEach(link => {
+          link.addEventListener("click", () => {
+              dropdown.classList.remove("active");
+              menuBtn.setAttribute("aria-expanded", "false");
+              menuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+          });
+      });
+      
+      // Handle window resize
+      function handleResize() {
+          if (window.innerWidth > 992) {
+              dropdown.classList.remove("active");
+              menuBtn.setAttribute("aria-expanded", "false");
+              menuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+          }
+      }
+      
+      window.addEventListener("resize", handleResize);
+      
+      // Scroll Reveal Animation (Intersection Observer)
+      const observerOptions = {
+          threshold: 0.1,
+          rootMargin: '0px 0px -50px 0px'
+      };
+
+      const observer = new IntersectionObserver((entries) => {
+          entries.forEach((entry, index) => {
+              if (entry.isIntersecting) {
+                  setTimeout(() => {
+                      entry.target.classList.add('reveal');
+                  }, (index % 4) * 150);
+                  observer.unobserve(entry.target);
+              }
+          });
+      }, observerOptions);
+
+      const cards = document.querySelectorAll('.card');
+      cards.forEach(card => observer.observe(card));
+  });
+  
+
+  
+  
+</script>
+<script>
+        document.querySelectorAll('.rent-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                let title, price, img, model;
+                
+                const vCard = this.closest('.vehicle-card');
+                if (vCard) {
+                    title = vCard.querySelector('.vehicle-name').innerText;
+                    price = vCard.querySelector('.vehicle-price').innerText.replace(/[^\d.]/g, '');
+                    img = vCard.querySelector('.vehicle-img').getAttribute('src');
+                    model = vCard.querySelector('.vehicle-model').innerText;
+                } else {
+                    const card = this.closest('.card');
+                    if (card) {
+                        title = card.querySelector('.vehicle-title').innerText;
+                        const priceElem = card.querySelector('.vehicle-per-month');
+                        if (priceElem) price = priceElem.innerText.replace(/[^\d.]/g, '');
+                        img = card.querySelector('.card-img').getAttribute('src');
+                        const chip = card.querySelector('.chip');
+                        if (chip) model = chip.innerText + ' Model';
+                    }
+                }
+                
+                if (title) {
+                    const params = new URLSearchParams({ title: title, price: price, img: img, model: model });
+                    window.location.href = 'fixed boooking.html?' + params.toString();
+                } else {
+                    window.location.href = 'fixed boooking.html';
+                }
+            });
+        });
+</script>
+</body>
+</html>

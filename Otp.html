@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DriveEase - Payment Verification</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <style>
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Navigation Bar (Standardized) */
+        nav {
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 15px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 30px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #4CAF50;
+        }
+
+        .account-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+
+        .account-btn:hover {
+            background-color: #45a049;
+        }
+
+        /* Mobile Dropdown styles */
+        .dropdown {
+            position: relative;
+            display: none;
+        }
+
+        .menu-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #333;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            right: 0;
+            top: 40px;
+            border-radius: 5px;
+        }
+
+        .dropdown-content a {
+            color: white;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .dropdown.active .dropdown-content {
+            display: block;
+        }
+
+        @media (max-width: 992px) {
+            .nav-links { display: none; }
+            .dropdown { display: block; }
+        }
+
+        /* Header Adjustment */
+        .page-header {
+            text-align: center;
+            padding: 120px 0 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .page-header h1 {
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 10px;
+            animation: fadeIn 1s;
+        }
+
+        .page-header p {
+            color: #666;
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+            animation: fadeIn 1.2s;
+        }
+
+        /* OTP Verification Section */
+        .otp-section {
+            max-width: 500px;
+            margin: 40px auto;
+            background: #fff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            animation: slideInUp 0.8s;
+        }
+
+        .otp-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .otp-message {
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .otp-inputs {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .otp-input {
+            width: 50px;
+            height: 60px;
+            text-align: center;
+            font-size: 1.5rem;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+
+        .otp-input:focus {
+            border-color: #4CAF50;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+            outline: none;
+            transform: translateY(-2px);
+        }
+
+        .timer {
+            margin-bottom: 20px;
+            font-size: 1rem;
+            color: #666;
+        }
+
+        .timer span {
+            color: #4CAF50;
+            font-weight: bold;
+        }
+
+        .resend-link {
+            color: #4CAF50;
+            text-decoration: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .resend-link:hover {
+            color: #45a049;
+            text-decoration: underline;
+        }
+
+        .resend-link.disabled {
+            color: #999;
+            cursor: not-allowed;
+            text-decoration: none;
+        }
+
+        .verify-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .verify-btn:hover {
+            background-color: #45a049;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .verify-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Success Section (initially hidden) */
+        .success-section {
+            max-width: 600px;
+            margin: 40px auto;
+            background: #fff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            display: none;
+            animation: fadeIn 0.8s;
+        }
+
+        .success-icon {
+            font-size: 5rem;
+            color: #4CAF50;
+            margin-bottom: 20px;
+            animation: bounce 1s;
+        }
+
+        .success-title {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .success-message {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+        }
+
+        /* E-Receipt */
+        .e-receipt {
+            background: #f9f9f9;
+            border-radius: 8px;
+            padding: 25px;
+            margin: 30px 0;
+            text-align: left;
+            border: 1px solid #eee;
+            animation: slideInUp 0.8s;
+        }
+
+        .receipt-title {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            color: #333;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+        }
+
+        .receipt-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .receipt-label {
+            color: #666;
+        }
+
+        .receipt-value {
+            font-weight: 500;
+        }
+
+        .receipt-total {
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-top: 15px;
+            padding-top: 10px;
+            border-top: 1px dashed #ddd;
+        }
+
+        .home-btn {
+            background-color: #333;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 20px;
+            display: inline-block;
+        }
+
+        .home-btn:hover {
+            background-color: #444;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Footer (Same as before) */
+        footer {
+            background-color: #222;
+            color: #fff;
+            padding: 50px 0 20px;
+            margin-top: 50px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .footer-column h3 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            color: #4CAF50;
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-column ul li a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-column ul li a:hover {
+            color: #4CAF50;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-links a {
+            color: #fff;
+            font-size: 1.5rem;
+            transition: color 0.3s;
+        }
+
+        .social-links a:hover {
+            color: #4CAF50;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid #444;
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+
+        .terms {
+            margin-top: 10px;
+        }
+
+        .terms a {
+            color: #4CAF50;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideInUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-20px);
+            }
+            60% {
+                transform: translateY(-10px);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .page-header h1 {
+                font-size: 2rem;
+            }
+            
+            .otp-section, .success-section {
+                padding: 30px 20px;
+            }
+            
+            .otp-inputs {
+                gap: 10px;
+            }
+            
+            .otp-input {
+                width: 45px;
+                height: 55px;
+                font-size: 1.3rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .otp-inputs {
+                gap: 8px;
+            }
+            
+            .otp-input {
+                width: 40px;
+                height: 50px;
+                font-size: 1.2rem;
+            }
+            
+            .e-receipt {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav>
+        <div class="container nav-container">
+            <div class="dropdown">
+                <button class="menu-btn" id="menuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="dropdown-content" id="dropdownContent">
+                    <a href="home page.html">Home</a>
+                    <a href="vehicle type.html">Vehicles</a>
+                    <a href="aboutus.html">About Us</a>
+                    <a href="contact us page.html">Contact</a>
+                </div>
+            </div>
+            
+            <a href="home page.html" class="logo">
+                <i class="bi bi-car-front-fill"></i> 
+                DriveEase
+            </a>
+            
+            <ul class="nav-links">
+                <li><a href="home page.html">Home</a></li>
+                <li><a href="vehicle type.html">Vehicles</a></li>
+                <li><a href="aboutus.html">About Us</a></li>
+                <li><a href="contact us page.html">Contact</a></li>
+                <li><a href="dashboard.html">Dashboard</a></li>
+            </ul>
+            
+            <button class="account-btn" onclick="window.location.href='logging form.html'">Sign In</button>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="page-header">
+        <div class="container">
+            <h1>Payment Verification</h1>
+            <p>Please enter the One Time Password (OTP) sent to your registered mobile number</p>
+        </div>
+    </header>
+
+    <!-- OTP Verification Section -->
+    <div class="container">
+        <div class="otp-section" id="otpSection">
+            <h2 class="otp-title">Enter OTP</h2>
+            <p class="otp-message">We've sent a 6-digit verification code to your mobile number ending with <strong>••••89</strong></p>
+            
+            <div class="otp-inputs">
+                <input type="text" class="otp-input" maxlength="1" data-index="1">
+                <input type="text" class="otp-input" maxlength="1" data-index="2">
+                <input type="text" class="otp-input" maxlength="1" data-index="3">
+                <input type="text" class="otp-input" maxlength="1" data-index="4">
+                <input type="text" class="otp-input" maxlength="1" data-index="5">
+                <input type="text" class="otp-input" maxlength="1" data-index="6">
+            </div>
+            
+            <div class="timer">
+                Time remaining: <span id="countdown">01:00</span>
+            </div>
+            
+            <p>
+                Didn't receive the code? 
+                <a href="#" class="resend-link disabled" id="resendLink">Resend OTP</a>
+            </p>
+            
+            <button class="verify-btn" id="verifyBtn">Verify & Complete Payment</button>
+        </div>
+        
+        <!-- Success Section (initially hidden) -->
+        <div class="success-section" id="successSection">
+            <div class="success-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h2 class="success-title">Payment Successful!</h2>
+            <p class="success-message">Your payment has been processed successfully. Below is your e-receipt.</p>
+            
+            <div class="e-receipt">
+                <h3 class="receipt-title">Payment Receipt</h3>
+                
+                <div class="receipt-row">
+                    <span class="receipt-label">Transaction ID:</span>
+                    <span class="receipt-value">DRV20230615892</span>
+                </div>
+                
+                <div class="receipt-row">
+                    <span class="receipt-label">Date & Time:</span>
+                    <span class="receipt-value">June 15, 2023 • 14:30</span>
+                </div>
+                
+                <div class="receipt-row">
+                    <span class="receipt-label">Vehicle:</span>
+                    <span class="receipt-value" id="receiptVehicle">BMW X5</span>
+                </div>
+                
+                <div class="receipt-row">
+                    <span class="receipt-label">Model/Type:</span>
+                    <span class="receipt-value" id="receiptModel">SUV (2023)</span>
+                </div>
+                
+                <div class="receipt-row">
+                    <span class="receipt-label">Rental Period:</span>
+                    <span class="receipt-value" id="receiptPeriod">Jun 15, 2023 - Jun 20, 2023</span>
+                </div>
+                
+                <div class="receipt-row">
+                    <span class="receipt-label">Payment Method:</span>
+                    <span class="receipt-value">VISA •••• 3456</span>
+                </div>
+                
+                <div class="receipt-row">
+                    <span class="receipt-label">Amount Paid:</span>
+                    <span class="receipt-value" id="receiptTotal">LKR4643.75</span>
+                </div>
+                
+                <div class="receipt-row receipt-total">
+                    <span class="receipt-label">Status:</span>
+                    <span class="receipt-value" style="color: #4CAF50;">Completed</span>
+                </div>
+            </div>
+            
+            <button class="home-btn" id="homeBtn">Return to Homepage</button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>DriveEase</h3>
+                    <p>Your trusted partner for premium vehicle rentals. We offer the best selection of vehicles at competitive prices.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-google"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="home page.html">Home</a></li>
+                        <li><a href="vehicle type.html">Vehicles</a></li>
+                        <li><a href="aboutus.html">About Us</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Contact Us</h3>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i> 123 Rental Street, City</li>
+                        <li><i class="fas fa-phone"></i> +1 (555) 123-4567</li>
+                        <li><i class="fas fa-envelope"></i> info@driveease.com</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2023 DriveEase. All Rights Reserved.</p>
+                <div class="terms">
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Cookie Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // OTP Input Handling
+        const otpInputs = document.querySelectorAll('.otp-input');
+        
+        otpInputs.forEach((input, index) => {
+            input.addEventListener('input', (e) => {
+                // Auto-focus to next input
+                if (e.target.value.length === 1 && index < otpInputs.length - 1) {
+                    otpInputs[index + 1].focus();
+                }
+                
+                // Validate input (numbers only)
+                e.target.value = e.target.value.replace(/\D/g, '');
+            });
+            
+            // Handle backspace
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Backspace' && e.target.value.length === 0 && index > 0) {
+                    otpInputs[index - 1].focus();
+                }
+            });
+        });
+
+        // Countdown Timer
+        let timeLeft = 60;
+        const countdownElement = document.getElementById('countdown');
+        const resendLink = document.getElementById('resendLink');
+        
+        function updateCountdown() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            
+            countdownElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            if (timeLeft <= 0) {
+                resendLink.classList.remove('disabled');
+                resendLink.textContent = 'Resend OTP';
+                clearInterval(timerInterval);
+            } else {
+                timeLeft--;
+            }
+        }
+        
+        let timerInterval = setInterval(updateCountdown, 1000);
+        
+        // Resend OTP
+        resendLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            if (!this.classList.contains('disabled')) {
+                // Reset timer
+                timeLeft = 60;
+                timerInterval = setInterval(updateCountdown, 1000);
+                
+                // Disable resend link
+                this.classList.add('disabled');
+                this.textContent = 'Resend OTP';
+                
+                // Clear OTP inputs
+                otpInputs.forEach(input => {
+                    input.value = '';
+                });
+                otpInputs[0].focus();
+                
+                // Show message (in a real app, you would resend the OTP here)
+                alert('A new OTP has been sent to your mobile number.');
+            }
+        });
+
+        // Verify OTP
+        const verifyBtn = document.getElementById('verifyBtn');
+        const otpSection = document.getElementById('otpSection');
+        const successSection = document.getElementById('successSection');
+        
+        verifyBtn.addEventListener('click', function() {
+            // Get OTP value
+            let otp = '';
+            otpInputs.forEach(input => {
+                otp += input.value;
+            });
+            
+            // Validate OTP (in a real app, you would verify with your backend)
+            if (otp.length === 6) {
+                // For demo purposes, any 6-digit code will work
+                otpSection.style.display = 'none';
+                successSection.style.display = 'block';
+                
+                // Clear the timer
+                clearInterval(timerInterval);
+            } else {
+                alert('Please enter a valid 6-digit OTP code.');
+            }
+        });
+
+        // Return to Home
+        const homeBtn = document.getElementById('homeBtn');
+        
+        homeBtn.addEventListener('click', function() {
+            window.location.href = 'home page.html';
+        });
+
+        // Mobile Menu Toggle
+        document.getElementById('menuBtn').addEventListener('click', function(e) {
+            e.stopPropagation();
+            document.querySelector('.dropdown').classList.toggle('active');
+        });
+
+        document.addEventListener('click', function() {
+            document.querySelector('.dropdown').classList.remove('active');
+        });
+
+        // Dynamic Receipt Data Loading
+        document.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            
+            // Generate a random transaction ID
+            const transId = 'DRV' + Math.floor(Math.random() * 900000000 + 100000000);
+            document.querySelector('.receipt-value').innerText = transId;
+            
+            // Set current date
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) + ' • ' + now.getHours() + ':' + now.getMinutes().toString().padStart(2, '0');
+            document.querySelectorAll('.receipt-value')[1].innerText = dateStr;
+
+            if (params.has('title')) {
+                document.getElementById('receiptVehicle').innerText = params.get('title');
+                
+                if (params.has('model')) {
+                    document.getElementById('receiptModel').innerText = params.get('model');
+                }
+                
+                if (params.has('pickup') && params.has('return')) {
+                    document.getElementById('receiptPeriod').innerText = `${params.get('pickup')} - ${params.get('return')}`;
+                }
+                
+                if (params.has('total')) {
+                    document.getElementById('receiptTotal').innerText = params.get('total');
+                }
+            }
+        });
+    </script>
+</body>
+</html>
